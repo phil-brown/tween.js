@@ -1,6 +1,6 @@
 /**
  * Tween Animations. 
- * The original project can be found at https://github.com/sole/tween.js. [This fork](https://github.com/phil-brown/tween.js) adds
+ * The original project can be found at https://github.com/sole/tween.js. This fork (https://github.com/phil-brown/tween.js) adds
  * support for handling device orientation changes during animations (something I found to cause a lot
  * of issues). It's not perfect, but from what I have read into, it seems to work the best of any other
  * available "solutions".
