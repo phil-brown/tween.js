@@ -3,46 +3,20 @@ tween.js
 
 #### Javascript Tweening Engine ####
 
-[![Flattr this](https://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/thing/45014/tween-js)
-
-Super simple, fast and easy to use tweening engine which incorporates optimised Robert Penner's equations.
-
-[Contributors](http://github.com/sole/tween.js/contributors)
-
-### Examples ###
-
-[![Relative values](http://sole.github.com/tween.js/assets/examples/09_relative.png)](http://sole.github.com/tween.js/examples/09_relative_values.html)
-[![Repeat](http://sole.github.com/tween.js/assets/examples/08_repeat.png)](http://sole.github.com/tween.js/examples/08_repeat.html)
-[![Dynamic to](http://sole.github.com/tween.js/assets/examples/07_dynamic_to.png)](http://sole.github.com/tween.js/examples/07_dynamic_to.html)
-[![Array interpolation](http://sole.github.com/tween.js/assets/examples/03_graphs.png)](http://sole.github.com/tween.js/examples/06_array_interpolation.html)
-[![Video and time](http://sole.github.com/tween.js/assets/examples/06_video_and_time.png)](http://sole.github.com/tween.js/examples/05_video_and_time.html)
-[![Simplest possible example](http://sole.github.com/tween.js/assets/examples/04_simplest.png)](http://sole.github.com/tween.js/examples/04_simplest.html)
-[![Graphs](http://sole.github.com/tween.js/assets/examples/03_graphs.png)](http://sole.github.com/tween.js/examples/03_graphs.html)
-[![Black and red](http://sole.github.com/tween.js/assets/examples/02_black_and_red.png)](http://sole.github.com/tween.js/examples/02_black_and_red.html)
-[![Bars](http://sole.github.com/tween.js/assets/examples/01_bars.png)](http://sole.github.com/tween.js/examples/01_bars.html)
-[![hello world](http://sole.github.com/tween.js/assets/examples/00_hello_world.png)](http://sole.github.com/tween.js/examples/00_hello_world.html)
-
-### Projects using tween.js ###
-
-[![MOMA Inventing Abstraction 1910-1925](http://sole.github.com/tween.js/assets/projects/09_moma.png)](http://www.moma.org/interactives/exhibitions/2012/inventingabstraction/)
-[![Web Lab](http://sole.github.com/tween.js/assets/projects/08_web_lab.png)](http://www.chromeweblab.com/)
-[![MACCHINA I](http://sole.github.com/tween.js/assets/projects/07_macchina.png)](http://5013.es/toys/macchina)
-[![Minesweeper 3D](http://sole.github.com/tween.js/assets/projects/06_minesweeper3d.png)](http://egraether.com/mine3d/)
-[![ROME](http://sole.github.com/tween.js/assets/projects/05_rome.png)](http://ro.me)
-[![WebGL Globe](http://sole.github.com/tween.js/assets/projects/04_webgl_globe.png)](http://data-arts.appspot.com/globe)
-[![Androidify](http://sole.github.com/tween.js/assets/projects/03_androidify.png)](http://www.androidify.com/)
-[![The Wilderness Downtown](http://sole.github.com/tween.js/assets/projects/01_wilderness.png)](http://thewildernessdowntown.com/)
-[![Linechart](http://sole.github.com/tween.js/assets/projects/00_linechart.png)](http://dejavis.org/linechart)
+Super simple, fast and easy to use tweening engine which incorporates optimised Robert Penner's equations. 
+This Fork of the [original Repo](http://github.com/sole/tween.js) introduces orientation change listening, 
+to improve the handling of device orientation changes during rotations
+(this is especially useful for animations with end values based on the dimensions of the window).
 
 ### Usage ###
 
-Download the [minified library](https://github.com/sole/tween.js/raw/master/build/tween.min.js) and include it in your html.
+Download the [minified library](https://github.com/phil-brown/tween.js/raw/master/build/tween.min.js) and include it in your html.
 
 ```html
 <script src="js/tween.min.js"></script>
 ```
 
-The following code creates a Tween which will change the `x` attribute in a position variable, so that it goes from 50 to 400 in 2 seconds. The anonymous function set up with an interval will update the screen so that we can see something happening:
+The following code creates a Tween which will change the `x` attribute in a position variable, so that it goes from 1/8 of the screen width to 7/8 of the screen in 4 seconds. The anonymous function set up with an interval will update the screen so that we can see something happening:
 
 ```html
 <script>
@@ -55,6 +29,9 @@ The following code creates a Tween which will change the `x` attribute in a posi
 		var output = document.createElement( 'div' );
 		output.style.cssText = 'position: absolute; left: 50px; top: 300px; font-size: 100px';
 		document.body.appendChild( output );
+		
+		start = { x: (window.innerHWidth || document.body.clientWidth)*0.125, y: (window.innerHeight || document.body.clientHeight)};
+		end = { x: (window.innerHWidth || document.body.clientWidth)*0.875 };
 
 		var tween = new TWEEN.Tween( { x: 50, y: 0 } )
 			.to( { x: 400 }, 2000 )
@@ -64,6 +41,15 @@ The following code creates a Tween which will change the `x` attribute in a posi
 				output.innerHTML = 'x == ' + Math.round( this.x );
 				output.style.left = this.x + 'px';
 
+			} )
+			.onOrientationChanged(function() {
+			    end = { x: (window.innerHWidth || document.body.clientWidth)*0.875 };
+			    var time = 4000 - arguments[1];
+			    //ensure time value is not negative (should not occur)
+			    if ( time < 0 ) {
+			        time = 0;
+			    }
+			    this.to(end, time);
 			} )
 			.start();
 
@@ -79,7 +65,7 @@ The following code creates a Tween which will change the `x` attribute in a posi
 </script>
 ```
 
-Note: this corresponds to the example [04_simplest.html](http://sole.github.com/tween.js/examples/04_simplest.html) that you can find in the ```examples``` folder.
+Note: this corresponds to the example [04_simplest.html](http://phil-brown.github.com/tween.js/examples/04_simplest.html) that you can find in the ```examples``` folder.
 
 Have a look at that folder to discover more functionalities of the library!
 
@@ -96,6 +82,10 @@ Use the `delay()` method: `var t = new TWEEN.Tween({...}).delay(1000);`
 No, we like to keep it simple and free of dependencies. Feel free to make one yourself, though! :-)
 
 ### Change log ###
+
+2013 04 09 - **r10pb** 
+
+* Forked to phil-brown, and added orientation change callbacks.
 
 2013 03 03 - **r10** (5,342 KB, gzip: 2,010 KB)
 

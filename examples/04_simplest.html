@@ -24,15 +24,27 @@
 				var output = document.createElement( 'div' );
 				output.style.cssText = 'position: absolute; left: 50px; top: 300px; font-size: 100px';
 				document.body.appendChild( output );
+				
+				start = { x: (window.innerHWidth || document.body.clientWidth)*0.125, y: (window.innerHeight || document.body.clientHeight)};
+				end = { x: (window.innerHWidth || document.body.clientWidth)*0.875 };
 
-				var tween = new TWEEN.Tween( { x: 50, y: 0 } )
-					.to( { x: 400 }, 2000 )
+				var tween = new TWEEN.Tween( start )
+					.to( end, 4000 )
 					.easing( TWEEN.Easing.Elastic.InOut )
 					.onUpdate( function () {
 
 						output.innerHTML = 'x == ' + Math.round( this.x );
 						output.style.left = this.x + 'px';
 
+					} )
+					.onOrientationChanged(function() {
+					    end = { x: (window.innerHWidth || document.body.clientWidth)*0.875 };
+					    var time = 4000 - arguments[1];
+					    //ensure time value is not negative (should not occur)
+					    if ( time < 0 ) {
+					        time = 0;
+					    }
+					    this.to(end, time);
 					} )
 					.start();
 

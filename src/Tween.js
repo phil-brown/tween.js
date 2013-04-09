@@ -1,4 +1,10 @@
 /**
+ * Tween Animations. 
+ * The original project can be found at https://github.com/sole/tween.js. [This fork](https://github.com/phil-brown/tween.js) adds
+ * support for handling device orientation changes during animations (something I found to cause a lot
+ * of issues). It's not perfect, but from what I have read into, it seems to work the best of any other
+ * available "solutions".
+ * 
  * @author sole / http://soledadpenades.com
  * @author mrdoob / http://mrdoob.com
  * @author Robert Eisele / http://www.xarg.org
@@ -9,6 +15,33 @@
  * @author Josh Faul / http://jocafa.com/
  * @author egraether / http://egraether.com/
  * @author endel / http://endel.me
+ * @author Phil Brown / https://github.com/phil-brown
+ *
+ *
+ * The MIT License
+ * 
+ * Copyright (c) 2010-2013 above authors.
+ * 
+ * Easing equations Copyright (c) 2001 Robert Penner http://robertpenner.com/easing/
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
  */
 
 var TWEEN = TWEEN || ( function () {
@@ -17,7 +50,7 @@ var TWEEN = TWEEN || ( function () {
 
 	return {
 
-		REVISION: '10',
+		REVISION: '10pb',
 
 		getAll: function () {
 
@@ -97,6 +130,9 @@ TWEEN.Tween = function ( object ) {
 	var _onStartCallbackFired = false;
 	var _onUpdateCallback = null;
 	var _onCompleteCallback = null;
+	/** Added by Phil Brown */
+	var _orientation = window.orientation;
+	var _onOrientationChangedCallback = null;
 
 	// Set all starting values present on the target object
 	for ( var field in object ) {
@@ -220,6 +256,12 @@ TWEEN.Tween = function ( object ) {
 		return this;
 
 	};
+	
+	/** Added by Phil Brown */
+	this.onOrientationChanged = function ( callback ) {
+		_onOrientationChangedCallback = callback;
+		return this;
+	};
 
 	this.update = function ( time ) {
 
@@ -228,6 +270,8 @@ TWEEN.Tween = function ( object ) {
 			return true;
 
 		}
+		
+		
 
 		if ( _onStartCallbackFired === false ) {
 
@@ -243,6 +287,13 @@ TWEEN.Tween = function ( object ) {
 
 		var elapsed = ( time - _startTime ) / _duration;
 		elapsed = elapsed > 1 ? 1 : elapsed;
+		
+		//added by Phil Brown
+		if (window.orientation != _orientation)
+		{
+			_orientation = window.orientation;
+			_onOrientationChangedCallback.call( _object, elapsed );
+		}
 
 		var value = _easingFunction( elapsed );
 
@@ -687,4 +738,3 @@ TWEEN.Interpolation = {
 	}
 
 };
-
