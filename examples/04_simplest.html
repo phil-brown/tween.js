@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		<div id="info">
-			<h1><a href="http://github.com/sole/tween.js">tween.js</a></h1>
+			<h1><a href="http://github.com/phil-brown/tween.js">tween.js (with orientation changes)</a></h1>
 			<h2>04 _ simplest possible example</h2>
 			<p>Creating a tween and doing little else apart from that :)</p>
 		</div>
@@ -26,7 +26,7 @@
 				document.body.appendChild( output );
 				
 				start = { x: (window.innerHWidth || document.body.clientWidth)*0.125, y: (window.innerHeight || document.body.clientHeight)};
-				end = { x: (window.innerHWidth || document.body.clientWidth)*0.875 };
+				end = { x: (window.innerHWidth || document.body.clientWidth)*0.6 };
 
 				var tween = new TWEEN.Tween( start )
 					.to( end, 4000 )
@@ -38,7 +38,7 @@
 
 					} )
 					.onOrientationChanged(function() {
-					    end = { x: (window.innerHWidth || document.body.clientWidth)*0.875 };
+					    end = { x: (window.innerHWidth || document.body.clientWidth)*0.8 };
 					    var time = 4000 - arguments[1];
 					    //ensure time value is not negative (should not occur)
 					    if ( time < 0 ) {
