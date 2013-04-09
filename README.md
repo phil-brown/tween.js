@@ -16,7 +16,7 @@ Download the [minified library](https://github.com/phil-brown/tween.js/raw/maste
 <script src="js/tween.min.js"></script>
 ```
 
-The following code creates a Tween which will change the `x` attribute in a position variable, so that it goes from 1/8 of the screen width to 7/8 of the screen in 4 seconds. The anonymous function set up with an interval will update the screen so that we can see something happening:
+The following code creates a Tween which will change the `x` attribute in a position variable, so that it goes from 1/8 of the screen width to 60% of the screen in 4 seconds, or 80% if a device rotation occurs. The anonymous function set up with an interval will update the screen so that we can see something happening:
 
 ```html
 <script>
@@ -31,7 +31,7 @@ The following code creates a Tween which will change the `x` attribute in a posi
 		document.body.appendChild( output );
 		
 		start = { x: (window.innerHWidth || document.body.clientWidth)*0.125, y: (window.innerHeight || document.body.clientHeight)};
-		end = { x: (window.innerHWidth || document.body.clientWidth)*0.875 };
+		end = { x: (window.innerHWidth || document.body.clientWidth)*0.6 };
 
 		var tween = new TWEEN.Tween( { x: 50, y: 0 } )
 			.to( { x: 400 }, 2000 )
@@ -43,7 +43,7 @@ The following code creates a Tween which will change the `x` attribute in a posi
 
 			} )
 			.onOrientationChanged(function() {
-			    end = { x: (window.innerHWidth || document.body.clientWidth)*0.875 };
+			    end = { x: (window.innerHWidth || document.body.clientWidth)*0.8 };
 			    var time = 4000 - arguments[1];
 			    //ensure time value is not negative (should not occur)
 			    if ( time < 0 ) {
