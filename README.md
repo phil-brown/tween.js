@@ -1,6 +1,8 @@
 tween.js
 ========
 
+#### THIS PROJECT IS ABANDONED ####
+
 #### Javascript Tweening Engine ####
 
 Super simple, fast and easy to use tweening engine which incorporates optimised Robert Penner's equations. 
