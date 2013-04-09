@@ -16,7 +16,7 @@ Download the [minified library](https://github.com/phil-brown/tween.js/raw/maste
 <script src="js/tween.min.js"></script>
 ```
 
-The following code creates a Tween which will change the `x` attribute in a position variable, so that it goes from 1/8 of the screen width to 7/8 of the screen in 4 seconds. The anonymous function set up with an interval will update the screen so that we can see something happening:
+The following code creates a Tween which will change the `x` attribute in a position variable, so that it goes from 1/8 of the screen width to 60% of the screen in 4 seconds, or 80% if a device rotation occurs. The anonymous function set up with an interval will update the screen so that we can see something happening:
 
 ```html
 <script>
