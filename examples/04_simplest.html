@@ -25,8 +25,8 @@
 				output.style.cssText = 'position: absolute; left: 50px; top: 300px; font-size: 100px';
 				document.body.appendChild( output );
 				
-				start = { x: (window.innerHWidth || document.body.clientWidth)*0.125, y: (window.innerHeight || document.body.clientHeight)};
-				end = { x: (window.innerHWidth || document.body.clientWidth)*0.6 };
+				start = { x: (window.innerWidth || document.body.clientWidth)*0.125, y: (window.innerHeight || document.body.clientHeight)};
+				end = { x: (window.innerWidth || document.body.clientWidth)*0.6 };
 
 				var tween = new TWEEN.Tween( start )
 					.to( end, 4000 )
@@ -38,8 +38,15 @@
 
 					} )
 					.onOrientationChanged(function() {
+					    console.log("orientation change");
 					    this.stop();
-					    end = { x: (window.innerHWidth || document.body.clientWidth)*0.8 };
+					    if (Math.abs(window.orientation)-90 == 0) {
+					        end = { x: (window.innerWidth || document.body.clientWidth)*0.8 };
+					    }
+					    else {
+					        end = { y: (window.innerHeight || document.body.clientHeight)*0.8 };
+					    }
+					    
 					    var time = 4000 - arguments[1];
 					    //ensure time value is not negative (should not occur)
 					    if ( time < 0 ) {
