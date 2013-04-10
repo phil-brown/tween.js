@@ -38,13 +38,8 @@
 
 					} )
 					.onOrientationChanged(function() {
-					    end = { x: (window.innerHWidth || document.body.clientWidth)*0.8 };
-					    var time = 4000 - arguments[1];
-					    //ensure time value is not negative (should not occur)
-					    if ( time < 0 ) {
-					        time = 0;
-					    }
-					    this.to(end, time);
+						end = { x: (window.innerHWidth || document.body.clientWidth)*0.2 };
+						tween.replaceTo(end);
 					} )
 					.start();
 

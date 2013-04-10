@@ -50,7 +50,7 @@ var TWEEN = TWEEN || ( function () {
 
 	return {
 
-		REVISION: '10pb',
+		REVISION: '10',
 
 		getAll: function () {
 
@@ -72,13 +72,20 @@ var TWEEN = TWEEN || ( function () {
 
 		remove: function ( tween ) {
 
-			var i = _tweens.indexOf( tween );
-
-			if ( i !== -1 ) {
-
-				_tweens.splice( i, 1 );
-
-			}
+			// var i = _tweens.indexOf( tween );
+// 
+			// if ( i !== -1 ) {
+// 
+				// _tweens.splice( i, 1 );
+// 
+			// }
+			var array = [];
+			_tweens.forEach(function(element, index, array){
+				if (element !== tween) {
+					array.push(element);
+				}
+				
+			});
 
 		},
 
@@ -153,6 +160,38 @@ TWEEN.Tween = function ( object ) {
 
 		return this;
 
+	};
+	
+	/** Added by Phil Brown */
+	this.replaceTo = function ( properties ) {
+		
+		_valuesEnd = properties;
+		for ( var property in _valuesEnd ) {
+
+			// check if an Array was provided as property value
+			if ( _valuesEnd[ property ] instanceof Array ) {
+
+				if ( _valuesEnd[ property ].length === 0 ) {
+
+					continue;
+
+				}
+
+				// create a local copy of the Array with the start value at the front
+				_valuesEnd[ property ] = [ _object[ property ] ].concat( _valuesEnd[ property ] );
+
+			}
+
+			_valuesStart[ property ] = _object[ property ];
+
+			if( ( _valuesStart[ property ] instanceof Array ) === false ) {
+				_valuesStart[ property ] *= 1.0; // Ensures we're using numbers, not strings
+			}
+
+			_valuesStartRepeat[ property ] = _valuesStart[ property ] || 0;
+
+		}
+		return this;
 	};
 
 	this.start = function ( time ) {
@@ -287,13 +326,6 @@ TWEEN.Tween = function ( object ) {
 
 		var elapsed = ( time - _startTime ) / _duration;
 		elapsed = elapsed > 1 ? 1 : elapsed;
-		
-		//added by Phil Brown
-		if (window.orientation != _orientation)
-		{
-			_orientation = window.orientation;
-			_onOrientationChangedCallback.call( _object, elapsed );
-		}
 
 		var value = _easingFunction( elapsed );
 
@@ -325,6 +357,14 @@ TWEEN.Tween = function ( object ) {
 		}
 
 		if ( elapsed == 1 ) {
+
+			//added by Phil Brown
+			if (window.orientation != _orientation)
+			{
+				_orientation = window.orientation;
+				_onOrientationChangedCallback.call( this, elapsed );
+				info("after orienatation change");
+			}
 
 			if ( _repeat > 0 ) {
 
