@@ -38,22 +38,8 @@
 
 					} )
 					.onOrientationChanged(function() {
-					    console.log("orientation change");
-					    this.stop();
-					    if (Math.abs(window.orientation)-90 == 0) {
-					        end = { x: (window.innerWidth || document.body.clientWidth)*0.8 };
-					    }
-					    else {
-					        end = { y: (window.innerHeight || document.body.clientHeight)*0.8 };
-					    }
-					    
-					    var time = 4000 - arguments[1];
-					    //ensure time value is not negative (should not occur)
-					    if ( time < 0 ) {
-					        time = 0;
-					    }
-					    this.to(end, time);
-					    this.start({ x: this.x, y: this.y});
+						end = { x: (window.innerHWidth || document.body.clientWidth)*0.2 };
+						tween.replaceTo(end);
 					} )
 					.start();
 
